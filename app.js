@@ -99,13 +99,13 @@ app.post('/users', (req, res) => {
                             let transporter = nodemailer.createTransport({
                                 service: 'gmail',
                                 auth: {
-                                    user: 'kabirsinghnitp@gmail.com' ,    // Sender email
+                                    user: 'kabirsinghnitpatna@gmail.com' ,    // Sender email
                                     pass: 'Rks&18158920' // Sender password
                                 }
                             });
                             
                             let mailOptions = {
-                                from: 'kabirsinghnitp@gmail.com',
+                                from: 'kabirsinghnitpatna@gmail.com',
                                 to: email,
                                 subject: 'Activate',
                                 text: `Please click on the link provided to activate the account https://chhithi.herokuapp.com/users/${email}/${validation_code}/${id}/${username}`
