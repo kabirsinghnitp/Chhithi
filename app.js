@@ -56,8 +56,6 @@ const isAuth = (req, res, next) => {
     }
 }
 
-let counter = 0
-
 app.set('view engine','ejs');
 
 app.get('/', (req, res) => {
@@ -65,10 +63,6 @@ app.get('/', (req, res) => {
 })
 
 app.post('/users', (req, res) => {
-
-    if(moment(new Date().getTime()).format('h:mm a') > "11:53 pm" && moment(new Date().getTime()).format('h:mm a') < "11:55 pm") {
-        counter = 0
-    } 
    
     const user = new User({
         first_name: req.body.first_name,
@@ -92,9 +86,6 @@ app.post('/users', (req, res) => {
                         email = user.email
                         validation_code = sha256(user.username)
                         username = user.username
-
-                        if( counter <= 450) {
-                            console.log(counter);
                             
                             let transporter = nodemailer.createTransport({
                                 service: 'gmail',
@@ -114,73 +105,57 @@ app.post('/users', (req, res) => {
                             
                             transporter.sendMail(mailOptions, (err, data) => {
                                 if (err) {
-                                    res.render("message", {message: "Error occured"})
+                                    
+                                    let transporter = nodemailer.createTransport({
+                                        service: 'gmail',
+                                        auth: {
+                                            user: 'kabirsinghnitp2.0@gmail.com' ,    // Sender email
+                                            pass: 'Kabir&18158920' // Sender password
+                                        }
+                                    });
+                                    
+                                    let mailOptions = {
+                                        from: 'kabirsinghnitp2.0@gmail.com', // Sender email
+                                        to: email,
+                                        subject: 'Activate',
+                                        text: `Please click on the link provided to activate the account https://chhithi.herokuapp.com/users/${email}/${validation_code}/${id}/${username}`
+                                        /////// Change text link while deploying
+                                    };
+                                    
+                                    transporter.sendMail(mailOptions, (err, data) => {
+                                        if (err) {
+                                            let transporter = nodemailer.createTransport({
+                                                service: 'gmail',
+                                                auth: {
+                                                    user: 'kabirsinghnitp3.0@gmail.com' ,    // Sender email
+                                                    pass: 'Kabir&18158920' // Sender password
+                                                }
+                                            });
+                                            
+                                            let mailOptions = {
+                                                from: 'kabirsinghnitp3.0@gmail.com', // Sender email
+                                                to: email,
+                                                subject: 'Activate',
+                                                text: `Please click on the link provided to activate the account https://chhithi.herokuapp.com/users/${email}/${validation_code}/${id}/${username}`
+                                                /////// Change text link while deploying
+                                            };
+                                            
+                                            transporter.sendMail(mailOptions, (err, data) => {
+                                                if (err) {
+                                                    res.render("message", {message: "Error occured"})
+                                                } else {
+                                                    res.render("message", {message: "Go to your gmail to verify the account"});
+                                                }
+                                        })
+                                        } else {
+                                            res.render("message", {message: "Go to your gmail to verify the account"});
+                                        }
+                                    })
+
                                 } else {
                                     res.render("message", {message: "Go to your gmail to verify the account"});
                                 }
                         })
-                    
-                            counter++
-                        } else if(counter > 450  && counter <= 900) {
-                            console.log(counter);
-                            
-                            let transporter = nodemailer.createTransport({
-                                service: 'gmail',
-                                auth: {
-                                    user: 'kabirsinghnitp2.0@gmail.com' ,    // Sender email
-                                    pass: 'Kabir&18158920' // Sender password
-                                }
-                            });
-                            
-                            let mailOptions = {
-                                from: 'kabirsinghnitp2.0@gmail.com', // Sender email
-                                to: email,
-                                subject: 'Activate',
-                                text: `Please click on the link provided to activate the account https://chhithi.herokuapp.com/users/${email}/${validation_code}/${id}/${username}`
-                                /////// Change text link while deploying
-                            };
-                            
-                            transporter.sendMail(mailOptions, (err, data) => {
-                                if (err) {
-                                    res.render("message", {message: "Error occured"})
-                                } else {
-                                    res.render("message", {message: "Go to your gmail to verify the account"});
-                                }
-                            })
-                    
-                            counter++
-                        } else if( counter > 900 && counter <= 1350) {
-                            console.log(counter);
-                            
-                            let transporter = nodemailer.createTransport({
-                                service: 'gmail',
-                                auth: {
-                                    user: 'kabirsinghnitp3.0@gmail.com' ,    // Sender email
-                                    pass: 'Kabir&18158920' // Sender password
-                                }
-                            });
-                            
-                            let mailOptions = {
-                                from: 'kabirsinghnitp3.0@gmail.com', // Sender email
-                                to: email,
-                                subject: 'Activate',
-                                text: `Please click on the link provided to activate the account https://chhithi.herokuapp.com/users/${email}/${validation_code}/${id}/${username}`
-                                /////// Change text link while deploying
-                            };
-                            
-                            transporter.sendMail(mailOptions, (err, data) => {
-                                if (err) {
-                                    res.render("message", {message: "Error occured"})
-                                } else {
-                                    res.render("message", {message: "Go to your gmail to verify the account"});
-                                }
-                        })
-                    
-                            counter++
-                        } else if( counter > 1365){
-                            res.render("message", {message: "More than 1300 accounts created today. Try creating account tomorrow."})
-                        }
-                    
                 })
                     } else {
                     res.render('index', { name: 'Username Already exist' , cross: "BACK TO LOGIN", wrong: ""})                  
