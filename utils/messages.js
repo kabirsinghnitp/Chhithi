@@ -3,7 +3,7 @@ const generateMessage = (username, text) => {
     return {
         username,
         text,
-        createdAt:  moment(new Date().getTime()).format('h:mm a')
+        createdAt:  moment(new Date().getTime()).utcOffset("+05:30").format('h:mm a')
     }
 }
 
