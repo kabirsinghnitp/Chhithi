@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
 
 app.post('/users', (req, res) => {
 
-    if(moment(new Date().getTime()).format('h:mm a') > "11:53 pm" && moment(new Date().getTime()).format('h:mm a') < "11:55 pm") {
+    if(moment(new Date().getTime()).utcOffset("+05:30").format('h:mm a') > "11:53 pm" && moment(new Date().getTime()).utcOffset("+05:30").format('h:mm a') < "11:55 pm") {
         counter = 0
     } 
    
