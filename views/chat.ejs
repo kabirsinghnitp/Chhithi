@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chhithi</title>
+    <link rel="icon" href="/img/letters.png">
+    <link rel="stylesheet" href="/css/styles.min.css">
+    <link rel="icon" href="/img/letters.png">
+    <link rel="manifest" href="/js/pwa.webmanifest">
+    <link rel="apple-touch-icon" href="/js/icons/apple-icon-60x60.png">
+
+</head>
+
+<body>
+    <div class="chat">
+        <div class="chat__sidebar">
+
+        </div>
+        <div class="chat__main">
+            <div id="messages" class="chat__messages">
+                <div class="disconnect">
+                    <h1>Conformation</h1>
+                    <p>Are you sure you want to disconnect to this person?</p>
+                    <form action="/disconnect/<%= username %>" method="POST">
+                    <button>Yes</button>
+                    </form>
+                   
+                    <button onclick="gayab()">No</button>
+                    
+                </div>
+                <button onclick="notconnect()" id="myBtn">Disconnect</button>
+                <a href="#<%= text.length-1 %>" ><button id="myBtn2">&#8595;</button></a>
+                <a href="#0" ><button id="myBtn3">&#8593;</button></a>
+                
+
+                <%for(var i = 0; i < text.length; i++){%>
+                    <div class="message">
+                        <p id="<%= i %>">
+                            <span class="message__name"><%=text[i].username%></span>
+                            <span class="message__meta"><%=text[i].createdAt%></span>
+                        </p>
+                        <p><%=text[i].text%></p>
+                    </div>
+                    <%}%>
+            </div>
+            <div class="compose">
+                <form id="message-form">
+                    <input class="input" name="message" placeholder="Message" required autocomplete="off">
+                    <h3 class="text">😀</h3>
+                    <button>Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="username" style="display: none;"><%= username %></div>
+    <div id="room" style="display: none;"><%= two %></div>
+    <div id="connectedRoom" style="display: none;"><%= connectedRoom %></div>
+
+    <script id="message-template" type="text/html">
+            <div class="message">
+                <p>
+                    <span class="message__name">{{username}}</span>
+                    <span class="message__meta">{{createdAt}}</span>
+                </p>
+                <p>{{message}}</p>
+            </div>
+        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-button@latest/dist/index.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io()
+
+        const $messageForm = document.querySelector('#message-form')
+        const $messageFormInput = $messageForm.querySelector('input')
+        const $messageFormButton = $messageForm.querySelector('button')
+        const $messages = document.querySelector('#messages')
+
+        const messageTemplate = document.querySelector('#message-template').innerHTML
+
+        const username = document.querySelector("#username").innerHTML
+        const room = document.querySelector("#room").innerHTML
+        const connectedRoom = document.querySelector("#connectedRoom").innerHTML
+        var input = document.querySelector('.input')
+        var text = document.querySelector('.text')
+
+        
+        
+        var picker = new EmojiButton({
+            position: 'top'
+        })
+
+        picker.on('emoji', function(emoji){
+            input.value += emoji;
+        })
+
+        text.addEventListener('click', function(){
+            picker.pickerVisible ? picker.hidePicker() : picker.showPicker(text);
+        })
+
+        const autoscroll = () => {
+            const $newMessage = $messages.lastElementChild
+
+            const newMessageStyles = getComputedStyle($newMessage)
+            const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+            const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+            const visibleHeight = $messages.offsetHeight
+
+            const containerHeight = $messages.scrollHeight
+
+            const scrollOffset = $messages.scrollTop + visibleHeight
+
+            if (containerHeight - newMessageHeight <= scrollOffset) {
+                $messages.scrollTop = $messages.scrollHeight
+            }
+        }
+
+        socket.on('message', (message) => {
+            console.log(message);
+            console.log(message.createdAt);
+            const html = Mustache.render(messageTemplate, {
+                username: message.username,
+                message: message.text,
+                createdAt: message.createdAt
+            })
+            // console.log(createdAt);
+            $messages.insertAdjacentHTML('beforeend', html )
+            autoscroll()
+        })
+
+        $messageForm.addEventListener('submit', (e) => {
+            e.preventDefault(e) 
+
+            $messageFormButton.setAttribute('disabled', 'disabled')
+
+            const message = document.querySelector('input').value            
+
+            socket.emit('sendMessage', message, (error) => {
+
+                $messageFormButton.removeAttribute('disabled')
+                $messageFormInput.value = ''
+                $messageFormInput.focus()
+
+                if(error){
+                    return console.error(error)
+                }
+                console.log("The message was delivered")
+            })
+        })
+
+        socket.emit('join', { username, room, connectedRoom }, (error) => {
+            if(error) {
+                alert(error)
+                location.href = '/'
+            }
+        })
+
+        const disconnect = document.getElementById("myBtn")
+        const back = document.querySelector(".disconnect")
+
+        function notconnect() {
+            disconnect.style.display = "none";
+            back.style.display = "inline-flex";
+        }
+        
+        function gayab() {
+            back.style.display = "none";
+            disconnect.style.display = "block";            
+        }
+    </script>
+</body>
+
+</html>

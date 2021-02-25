@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#764ABC"/> 
+  <title>Chhithi</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css'>
+  <link rel="stylesheet" href="/css/style.min.css">
+  <link rel="apple-touch-icon" href="/js/icons/apple-icon-60x60.png">
+  <link rel="icon" href="/img/letters.png">
+  <link rel="manifest" href="/js/pwa.webmanifest">
+
+</head>
+<body>
+<div class="container" id="container" >
+	<div class="form-container sign-up-container">
+		<form action="/users" method="post">
+			<h1>Create Account</h1>
+			<input type="text" id="first_name" name="first_name" placeholder="Name" required=true />
+			<input type="text" id="username" name="username" placeholder="Userame" required=true />
+			<input type="email" id="email" name="email" placeholder="Email" required=true />
+			<input type="password" id="password" name="password" placeholder="Password" required=true />
+			<div class="remember">
+				<input type="radio" id="male" name="gender" value="male" required="required" ><label for="male">Male</label>
+  				<input type="radio" id="female" name="gender" value="female" required="required" ><label for="female">Female</label>
+			</div>
+			<button type="submit">Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="/signin" method="post">
+			<h1>Sign in</h1>
+			<input type="email" id="email" name="email" placeholder="Email" required=true />
+			<input type="password" id="password" name="password" placeholder="Password" required=true />
+			<!-- <div class="remember">
+				<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+				<label for="remember">Remember Me</label>
+			</div> -->
+			<a onclick="forgotPassword()">Forgot your password?</a>
+			<button>Sign In</button>
+		</form>
+	</div>
+
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>By logging in you agree to the ridiculously long terms that you didn't bother to read</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>
+</div>
+<p id="wrong"><%= wrong %></p>
+<p id="email-validation"><%= name %><a  href="http://localhost:3030"><b><%= cross %></b></a></p>
+
+<div class="container2">
+	<div id="container2" >
+		<form action="/users" method="post">
+			<h1>Create Account</h1>
+				<input type="text" id="first_name" name="first_name" placeholder="Name" required=true />
+				<input type="text" id="username" name="username" placeholder="Userame" required=true />
+				<input type="email" id="email" name="email" placeholder="Email" required=true />
+				<input type="password" id="password" name="password" placeholder="Password" required=true />
+				<div class="remember">
+					<input type="radio" id="male" name="gender" value="male" required><label for="male">Male</label>
+					<input type="radio" id="female" name="gender" value="female" required><label for="female">Female</label>
+				</div>
+				<button>Sign Up</button>
+		</form>
+	</div>
+	<p id="login-text">Already have an account! <button onclick="signinform()" id="login-button">Login</button></p>
+	<div id="container3" >
+		<form action="/signin" method="post">
+			<h1>Sign in</h1>
+			<input type="email" id="email" name="email" placeholder="Email" required=true />
+			<input type="password" id="password" name="password" placeholder="Password" required=true />
+			<!-- <div class="remember">
+				<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+				<label for="remember">Remember Me</label>
+			</div> -->
+			<p id="forget-password-button" onclick="forgotPassword()">Forgot your password?</p>
+			<button>Sign In</button>
+		</form>
+	</div>
+	<p id="register-text">New here? <button onclick="signinform()" id="register-button">Create Account</button></p>
+</div>
+<div class="forget-password">
+	<form action="/reset" method="POST">
+		<h1>Email</h1>
+	<p>Enter your email to reset the password</p>
+	<input type="email" id="email" name="email" placeholder="Email" required=true />
+	<button>Send</button>
+	</form>
+</div>
+<footer>
+	<p id="love">Made with
+		<span class="love">♥</span>
+		 by Kabir in <img src="/img/india.png">
+	  </p>
+</footer>
+  <script  src="js/script.min.js"></script>
+  <script src="js/pwa.js"></script>
+</body>
+</html>
