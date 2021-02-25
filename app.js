@@ -471,7 +471,7 @@ io.on('connection', (socket) => {
         let text = new Text({
             text: message,
             username: user.username,
-            createdAt: moment(new Date().getTime()).format('MMM Do, h:mm a'),
+            createdAt: moment(new Date().getTime()).utcOffset("+05:30").format('MMM Do, h:mm a'),
             commonroom: user.connectedRoom
         })
 
