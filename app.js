@@ -16,11 +16,10 @@ const Filter = require('bad-words')
 const { generateMessage } = require('./utils/messages')
 var moment = require('moment');
 
-const mongodb_uri2 = 'mongodb+srv://voidrohit:Rks&18158920@cluster0.oiqtt.mongodb.net/ChatApp?retryWrites=true&w=majority'
-const local = 'mongodb://127.0.0.1:27017/ChatAp'
+const local = 'mongodb://127.0.0.1:27017/Chitthi'
 
 const store = new MongodbSession({
-    uri: mongodb_uri2,
+    uri: mongodb_uri,
     collestion: 'sessions'
 })
 
@@ -41,7 +40,7 @@ app.use(session({
         httpOnly: true,
         maxAge: null
     },
-    secret: 'uniqueKey',   //********************************  change it man!! it must be secret  ******************************************//
+    secret: 'unique',   //********************************  change it man!! it must be secret  ******************************************//
     resave: false,
     saveUninitialized: false,
     store: store,
@@ -99,8 +98,8 @@ app.post('/users', (req, res) => {
                             let transporter = nodemailer.createTransport({
                                 service: 'gmail',
                                 auth: {
-                                    user: 'kabirsinghnitpatna@gmail.com' ,    // Sender email
-                                    pass: 'Rks&18158920' // Sender password
+                                    user: EMAIL ,    // Sender email
+                                    pass: PASSWORD // Sender password
                                 }
                             });
                             
@@ -128,7 +127,7 @@ app.post('/users', (req, res) => {
                                 service: 'gmail',
                                 auth: {
                                     user: 'kabirsinghnitp2.0@gmail.com' ,    // Sender email
-                                    pass: 'Kabir&18158920' // Sender password
+                                    pass: PASSWORD // Sender password
                                 }
                             });
                             
@@ -156,7 +155,7 @@ app.post('/users', (req, res) => {
                                 service: 'gmail',
                                 auth: {
                                     user: 'kabirsinghnitp3.0@gmail.com' ,    // Sender email
-                                    pass: 'Kabir&18158920' // Sender password
+                                    pass: PASSWORD2 // Sender password
                                 }
                             });
                             
@@ -239,7 +238,7 @@ app.post('/reset', (req, res) => {
             service: 'gmail',
             auth: {
                 user: 'kabirsinghnitp@gmail.com',    // Sender email
-                pass: 'Rks&18158920'  // Sender password
+                pass: PASSWORD  // Sender password
             }
         });
         
